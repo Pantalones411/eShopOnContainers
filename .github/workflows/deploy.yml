@@ -46,6 +46,7 @@ jobs:
     - run: |
         docker-compose build . -t ${{ secrets.REGISTRY_ENDPOINT }}:linux-dev
         docker-compose push ${{ secrets.REGISTRY_ENDPOINT }}:linux-dev
+      working-directory: ./src
     
     # Set the target Azure Kubernetes Service (AKS) cluster. 
     - uses: azure/aks-set-context@v1
