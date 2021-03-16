@@ -30,54 +30,21 @@ env:
   NAMESPACE: default
 
 jobs:
+
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
     
-    # Connect to Azure Container registry (ACR)
-    - uses: azure/docker-login@v1
+    - name: Login via Az module
+      uses: azure/login@v1
       with:
-        login-server: ${{ env.REGISTRY_NAME }}.azurecr.io
-        username: ${{ secrets.USERNAME }} 
-        password: ${{ secrets.PASSWORD }}
-    
-    # Set the target Azure Kubernetes Service (AKS) cluster. 
-    - uses: azure/aks-set-context@v1
-      with:
-        creds: ${{ secrets.AZ_CREDENTIALS }}
-        cluster-name: ${{ env.CLUSTER_NAME }}
-        resource-group: ${{ env.CLUSTER_RESOURCE_GROUP }}
-    
-    # Create namespace if doesn't exist
-    - run: |
-        kubectl create namespace ${{ env.NAMESPACE }} --dry-run -o json | kubectl apply -f -
-    
-    # Create imagepullsecret for Azure Container registry (ACR)
-    - uses: azure/k8s-create-secret@v1
-      with:
-        container-registry-url: ${{ env.REGISTRY_NAME }}.azurecr.io
-        container-registry-username: ${{ secrets.USERNAME }}
-        container-registry-password: ${{ secrets.PASSWORD }}
-        secret-name: ${{ env.REGISTRY_NAME }}-registry-connection
-        namespace: ${{ env.NAMESPACE }}
-
-    # Baking the helm chart to generate the manifests to deploy
-    - uses: azure/k8s-bake@v1
-      with:
-        renderEngine: 'helm2'
-        helmChart: './deploy/k8s/helm/' 
-        helm-version: 'latest' 
-      id: bake
-
-    # Deploy app to AKS
-    - uses: azure/k8s-deploy@v1
-      with:
-        manifests: ${{ steps.bake.outputs.manifestsBundle }}
-        images: |
-          ${{ secrets.REGISTRY_ENDPOINT }}:linux-dev
-        imagepullsecrets: |
-          ${{ env.REGISTRY_NAME }}-registry-connection
-        namespace: ${{ env.NAMESPACE }}
+        creds: ${{secrets.AZ_CREDENTIALS}}
+        enable-AzPSSession: true 
         
-        
+    - name: Run Azure PowerShell script
+      uses: azure/powershell@v1
+      with:
+        inlineScript: |
+          .\deploy-all.ps1 -externalDns aks -aksName {{ secrets.CLUSTER_NAME }} -aksRg {{ secrets.CLUSTER_RG }} -imageTag linux-dev -useMesh $false
+        azPSVersion: '3.1.0'
+        working-directory: ./deploy/k8s/helm/
