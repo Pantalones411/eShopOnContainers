@@ -42,12 +42,6 @@ jobs:
         username: ${{ secrets.USERNAME }} 
         password: ${{ secrets.PASSWORD }}
     
-    # Container build and push to a Azure Container registry (ACR)
-    - run: |
-        docker-compose build . -t ${{ secrets.REGISTRY_ENDPOINT }}:linux-dev
-        docker-compose push ${{ secrets.REGISTRY_ENDPOINT }}:linux-dev
-      working-directory: ./src
-    
     # Set the target Azure Kubernetes Service (AKS) cluster. 
     - uses: azure/aks-set-context@v1
       with:
