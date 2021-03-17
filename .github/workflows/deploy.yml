@@ -15,9 +15,9 @@ on:
     inputs:
       deployInfra: 
         # Friendly description to be shown in the UI instead of 'name'
-        description: 'Would you like to deploy the infrastructure?'
+        description: 'Would you like to deploy the infrastructure? ($true or $false)'
         # Default value if no value is explicitly provided
-        default: 'true'
+        default: '$true'
         # Input has to be provided for the workflow to run
         required: false
 defaults:
