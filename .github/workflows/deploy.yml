@@ -32,6 +32,8 @@ env:
   REGISTRY_ENDPOINT: ${{ secrets.REGISTRY_ENDPOINT }}
   NAMESPACE: default
   WORKSPACE: $GITHUB_WORKSPACE
+  ACR_USERNAME: ${{ secrets.USERNAME }}
+  ACR_PASSWORD: ${{ secrets.PASSWORD }}
 
 jobs:
 
@@ -53,7 +55,9 @@ jobs:
         inlineScript: |
           az --version
           cd $Env:GITHUB_WORKSPACE/deploy/k8s/helm
-          . $Env:GITHUB_WORKSPACE/deploy/k8s/helm/deploy-all.ps1 -externalDns aks -aksName $Env:CLUSTER_NAME -aksRg $Env:CLUSTER_RESOURCE_GROUP -imageTag linux-dev -useMesh $false
+          . $Env:GITHUB_WORKSPACE/deploy/k8s/helm/deploy-all.ps1 -externalDns aks -aksName $Env:CLUSTER_NAME -aksRg $Env:CLUSTER_RESOURCE_GROUP -imageTag linux-dev -registry $Env:REGISTRY_NAME.azurecr.io -dockerUser $Env:ACR_USERNAME -dockerPassword $Env:ACR_PASSWORD -useMesh $false
+          az aks get-credentials --resource-group <resource-group-name> --name <k8s-cluster-name>       
+          kubectl get deployment
         azPSVersion: '3.1.0'
 
         
