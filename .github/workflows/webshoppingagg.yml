@@ -29,7 +29,7 @@ on:
 env:
   SERVICE: webshoppingagg
   IMAGE: webshoppingagg
-  INSTRUMENTATION_KEY: ${{ secrests.APPINSIGHTS_INSTRUMENTATION }}
+  INSTRUMENTATION_KEY: ${{ secrets.APPINSIGHTS_INSTRUMENTATION }}
 
 jobs:
 

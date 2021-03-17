@@ -31,7 +31,7 @@ on:
 env:
   SERVICE: identity-api
   IMAGE: identity.api
-  INSTRUMENTATION_KEY: ${{ secrests.APPINSIGHTS_INSTRUMENTATION }}
+  INSTRUMENTATION_KEY: ${{ secrets.APPINSIGHTS_INSTRUMENTATION }}
 
 jobs:
 
