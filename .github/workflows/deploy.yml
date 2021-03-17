@@ -49,5 +49,5 @@ jobs:
       with:
         inlineScript: |
           echo ls
-          . .\deploy\k8s\helm\deploy-all.ps1 -externalDns aks -aksName {{ secrets.CLUSTER_NAME }} -aksRg {{ secrets.CLUSTER_RG }} -imageTag linux-dev -useMesh $false
+          . $GITHUB_WORKSPACE\deploy\k8s\helm\deploy-all.ps1 -externalDns aks -aksName {{ secrets.CLUSTER_NAME }} -aksRg {{ secrets.CLUSTER_RG }} -imageTag linux-dev -useMesh $false
         azPSVersion: '3.1.0'
