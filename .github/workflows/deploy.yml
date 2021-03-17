@@ -27,8 +27,8 @@ defaults:
 # Environment variables available to all jobs and steps in this workflow
 env:
   REGISTRY_NAME: ${{ secrets.REGISTRY_NAME }}
-  CLUSTER_NAME: ${{ secrets.CLUSTER_NAME}}
-  CLUSTER_RESOURCE_GROUP: ${{ secrets.CLUSTER_RG}}
+  CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
+  CLUSTER_RESOURCE_GROUP: ${{ secrets.CLUSTER_RG }}
   REGISTRY_ENDPOINT: ${{ secrets.REGISTRY_ENDPOINT }}
   NAMESPACE: default
   WORKSPACE: $GITHUB_WORKSPACE
@@ -40,7 +40,7 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-      
+
     - name: Login via Az module
       uses: azure/login@v1
       with:
@@ -51,15 +51,9 @@ jobs:
       uses: azure/powershell@v1
       with:
         inlineScript: |
-          cd $Env:GITHUB_WORKSPACE
-          ls | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          cd deploy
-          ls | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          cd k8s
-          ls | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          cd helm
-          ls | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          . $Env:GITHUB_WORKSPACE/deploy/k8s/helm/deploy-all.ps1 -externalDns aks -aksName {{ secrets.CLUSTER_NAME }} -aksRg {{ secrets.CLUSTER_RG }} -imageTag linux-dev -useMesh $false
+          az --version
+          cd $Env:GITHUB_WORKSPACE/deploy/k8s/helm
+          . $Env:GITHUB_WORKSPACE/deploy/k8s/helm/deploy-all.ps1 -externalDns aks -aksName $Env:CLUSTER_NAME -aksRg $Env:CLUSTER_RESOURCE_GROUP -imageTag linux-dev -useMesh $false
         azPSVersion: '3.1.0'
 
         
