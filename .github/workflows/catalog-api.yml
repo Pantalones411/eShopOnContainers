@@ -31,6 +31,7 @@ on:
 env:
   SERVICE: catalog-api
   IMAGE: catalog.api
+  INSTRUMENTATION_KEY: ${{ secrests.APPINSIGHTS_INSTRUMENTATION }}
 
 jobs:
 
