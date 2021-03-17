@@ -50,12 +50,14 @@ jobs:
       with:
         inlineScript: |
           cd $Env:GITHUB_WORKSPACE
-          ls | Out-Host
+          ls | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           cd deploy
-          ls | Out-Host
+          ls | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           cd k8s
-          ls | Out-Host
+          ls | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           cd helm
-          ls | Out-Host
+          ls | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           . $Env:GITHUB_WORKSPACE/deploy/k8s/helm/deploy-all.ps1 -externalDns aks -aksName {{ secrets.CLUSTER_NAME }} -aksRg {{ secrets.CLUSTER_RG }} -imageTag linux-dev -useMesh $false
         azPSVersion: '3.1.0'
+
+        
