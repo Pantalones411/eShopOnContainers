@@ -31,7 +31,7 @@ on:
 env:
   SERVICE: ordering-api
   IMAGE: ordering.api
-  INSTRUMENTATION_KEY: ${{ secrests.APPINSIGHTS_INSTRUMENTATION }}
+  INSTRUMENTATION_KEY: ${{ secrets.APPINSIGHTS_INSTRUMENTATION }}
 
 jobs:
 
