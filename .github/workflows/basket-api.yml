@@ -31,6 +31,7 @@ on:
 env:
   SERVICE: basket-api
   IMAGE: basket.api
+  INSTRUMENTATION_KEY: ${{ secrests.APPINSIGHTS_INSTRUMENTATION }}
 
 jobs:
 
